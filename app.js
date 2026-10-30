@@ -31,6 +31,45 @@
   let toastTimeout;
   let audioContext;
   let pendingSettingsReset = false;
+  let fitFrame = null;
+
+  function scheduleScreenFit() {
+    if (fitFrame !== null) return;
+    fitFrame = requestAnimationFrame(() => {
+      fitFrame = null;
+      const wheelPanel = document.querySelector('.wheel-panel');
+      const stage = document.querySelector('.wheel-stage');
+      const panelStyle = getComputedStyle(wheelPanel);
+      const stageStyle = getComputedStyle(stage);
+      let occupied = parseFloat(panelStyle.paddingTop) + parseFloat(panelStyle.paddingBottom) + parseFloat(stageStyle.marginTop) + parseFloat(stageStyle.marginBottom);
+      for (const child of wheelPanel.children) {
+        if (child === stage) continue;
+        const style = getComputedStyle(child);
+        if (style.display !== 'none') occupied += child.getBoundingClientRect().height + parseFloat(style.marginTop) + parseFloat(style.marginBottom);
+      }
+      const availableWidth = wheelPanel.clientWidth - parseFloat(panelStyle.paddingLeft) - parseFloat(panelStyle.paddingRight);
+      stage.style.width = `${Math.max(0, Math.floor(Math.min(wheelPanel.clientHeight - occupied, availableWidth)))}px`;
+
+      const content = $('question-content');
+      const text = content.querySelector('.question-text');
+      if (!text) return;
+      text.style.removeProperty('font-size');
+      const contentStyle = getComputedStyle(content);
+      const availableHeight = content.clientHeight - parseFloat(contentStyle.paddingTop) - parseFloat(contentStyle.paddingBottom);
+      let low = 1;
+      let high = parseFloat(getComputedStyle(text).fontSize);
+      const fits = () => text.scrollHeight <= availableHeight && text.scrollWidth <= content.clientWidth;
+      if (fits()) return;
+      // Measure the real rendered text, including explicit line breaks, rather than its length.
+      while (high - low > .1) {
+        const size = (low + high) / 2;
+        text.style.fontSize = `${size}px`;
+        if (fits()) low = size;
+        else high = size;
+      }
+      text.style.fontSize = `${low}px`;
+    });
+  }
 
   function restore() {
     const fallback = freshState();
@@ -158,15 +197,17 @@
     if (!q) return;
     content.className = 'question-content';
     const p = document.createElement('p');
-    p.className = 'question-text' + (q.text.length > 650 ? ' very-long' : q.text.length > 310 ? ' long' : '');
+    p.className = 'question-text';
     p.textContent = q.text;
     content.replaceChildren(p);
     $('question-label').textContent = `ВОПРОС № ${state.questions.indexOf(q) + 1}`;
     $('sender-attribution').hidden = false;
+    $('sender-portrait').hidden = false;
     $('sender-name').textContent = G.senderName(q);
     $('sender-photo').alt = `Отправитель: ${G.senderName(q)}`;
     loadSenderPhoto($('sender-photo'), q, state.questions.indexOf(q) + 1);
     content.closest('.question-card').classList.add('has-sender');
+    scheduleScreenFit();
   }
   function loadSenderPhoto(image, question, number) {
     const candidates = G.photoCandidates(question, number);
@@ -192,10 +233,12 @@
     $('edit-questions').disabled = spinning;
     $('question-picker-open').disabled = spinning;
     $('timer-start').disabled = spinning;
+    scheduleScreenFit();
   }
   function clearQuestion() {
     $('question-label').textContent = 'ТАЙНА ЕЩЁ НЕ РАСКРЫТА';
     $('sender-attribution').hidden = true;
+    $('sender-portrait').hidden = true;
     $('question-content').closest('.question-card').classList.remove('has-sender');
     const content = $('question-content');
     content.className = 'question-content empty';
@@ -221,6 +264,7 @@
     document.querySelector('.wheel-stage').classList.add('spinning');
     const content = $('question-content');
     $('sender-attribution').hidden = true;
+    $('sender-portrait').hidden = true;
     content.closest('.question-card').classList.remove('has-sender');
     content.className = 'question-content empty';
     content.innerHTML = '<div class="empty-symbol" style="font-size:40px;height:auto">✦</div><h2>Колесо пробуждает тайну…</h2><p>Узнаем, что приготовила эта ночь.</p>';
@@ -517,6 +561,11 @@
   });
   // Save the live deadline; a reload restores the timer paused at the real remainder.
   window.addEventListener('pagehide', persist);
+  window.addEventListener('resize', scheduleScreenFit);
+  const fitObserver = new ResizeObserver(scheduleScreenFit);
+  fitObserver.observe(document.querySelector('.game-layout'));
+  fitObserver.observe($('question-content'));
+  document.fonts.ready.then(scheduleScreenFit);
   document.addEventListener('visibilitychange', () => { if (document.hidden) persist(); else if (state.timer.running) renderTimer(); });
   renderWheel(); renderGame(); renderQuestion(); renderTimer(); renderSound(); persist();
 })();

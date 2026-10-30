@@ -32,6 +32,12 @@
       </section>
 
       <div class="game-layout">
+        <section class="scoreboard" aria-label="Счёт игры">
+          <div class="team team-experts"><div class="team-icon" aria-hidden="true">♜</div><div class="team-name"><span>СИЛА РАЗУМА</span><h2>Знатоки</h2></div><div class="score-controls"><button data-score="experts" data-delta="-1" aria-label="Убавить очко знатокам">−</button><output id="score-experts" aria-label="Очки знатоков">0</output><button data-score="experts" data-delta="1" aria-label="Добавить очко знатокам">+</button></div></div>
+          <div class="score-divider"><span>СЧЁТ ИГРЫ</span><b>:</b></div>
+          <div class="team team-viewers"><div class="team-icon" aria-hidden="true">☾</div><div class="team-name"><span>СИЛА ТЬМЫ</span><h2>Зрители</h2></div><div class="score-controls"><button data-score="viewers" data-delta="-1" aria-label="Убавить очко зрителям">−</button><output id="score-viewers" aria-label="Очки зрителей">0</output><button data-score="viewers" data-delta="1" aria-label="Добавить очко зрителям">+</button></div></div>
+        </section>
+
         <section class="wheel-panel" aria-label="Выбор случайного вопроса">
           <div class="section-label"><span class="tiny-diamond">◆</span> КОЛЕСО СУДЬБЫ <span class="tiny-diamond">◆</span></div>
           <div class="wheel-stage">
@@ -64,7 +70,7 @@
         <section class="round-panel" aria-label="Текущий раунд">
           <article class="question-card">
             <div class="card-corner tl"></div><div class="card-corner tr"></div><div class="card-corner bl"></div><div class="card-corner br"></div>
-            <div class="question-top"><div class="question-heading"><span id="question-label" class="eyebrow">ТАЙНА ЕЩЁ НЕ РАСКРЫТА</span><div id="sender-attribution" class="sender-attribution" hidden><img id="sender-photo" class="sender-photo" src="senders_img/default.png" alt=""><div class="sender-copy"><span class="sender-prefix">Вопрос от</span><span id="sender-name" class="sender-name"></span></div></div></div><span id="round-badge" class="round-badge">РАУНД 01</span></div>
+            <div class="question-top"><div class="question-heading"><span id="question-label" class="eyebrow">ТАЙНА ЕЩЁ НЕ РАСКРЫТА</span><div id="sender-attribution" class="sender-attribution" hidden><div class="sender-copy"><span class="sender-prefix">Вопрос от</span><span id="sender-name" class="sender-name"></span></div></div></div><span id="round-badge" class="round-badge">РАУНД 01</span></div>
             <div id="question-content" class="question-content empty">
               <svg class="empty-symbol" viewBox="0 0 64 64" aria-hidden="true"><path d="M12 49V22Q12 5 32 5T52 22v27l-10-6-10 6-10-6Z"/><circle cx="25" cy="24" r="2"/><circle cx="39" cy="24" r="2"/><path d="M27 35q5-5 10 0"/></svg>
               <h2>У каждой тайны — свой час</h2>
@@ -80,13 +86,8 @@
             <div class="timer-footer"><span id="timer-status">Минута, чтобы найти истину</span><span><kbd>ПРОБЕЛ</kbd> старт / пауза</span></div>
           </section>
         </section>
+        <figure id="sender-portrait" class="sender-portrait" hidden><img id="sender-photo" class="sender-photo" src="senders_img/default.png" alt=""><figcaption>Отправитель вопроса</figcaption></figure>
       </div>
-
-      <section class="scoreboard" aria-label="Счёт игры">
-        <div class="team team-experts"><div class="team-icon" aria-hidden="true">♜</div><div class="team-name"><span>СИЛА РАЗУМА</span><h2>Знатоки</h2></div><div class="score-controls"><button data-score="experts" data-delta="-1" aria-label="Убавить очко знатокам">−</button><output id="score-experts" aria-label="Очки знатоков">0</output><button data-score="experts" data-delta="1" aria-label="Добавить очко знатокам">+</button></div></div>
-        <div class="score-divider"><span>СЧЁТ ИГРЫ</span><b>:</b></div>
-        <div class="team team-viewers"><div class="team-icon" aria-hidden="true">☾</div><div class="team-name"><span>СИЛА ТЬМЫ</span><h2>Зрители</h2></div><div class="score-controls"><button data-score="viewers" data-delta="-1" aria-label="Убавить очко зрителям">−</button><output id="score-viewers" aria-label="Очки зрителей">0</output><button data-score="viewers" data-delta="1" aria-label="Добавить очко зрителям">+</button></div></div>
-      </section>
     </main>
     <footer class="footer"><span>✦ <span>Замок хранит свои секреты. Пока.</span></span><span><kbd>W</kbd> колесо <span class="footer-dot">·</span> <kbd>F</kbd> полный экран <span class="footer-dot">·</span> <span id="played-count">Сыграно 0 из 15</span></span></footer>
   </div>

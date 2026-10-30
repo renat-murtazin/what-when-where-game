@@ -7,9 +7,9 @@
 @media(max-width:760px){.app{padding:0 20px}.topbar{height:77px}.brand{font-size:12px;letter-spacing:1.5px;gap:8px}.brand img{width:28px;height:34px}.brand small{font-size:6px;letter-spacing:1px}.toolbar{gap:7px}.settings-button{padding:9px;font-size:0;gap:0}.icon-button{width:33px;height:33px}.intro{padding:28px 0 25px}h1{font-size:42px;letter-spacing:-1px}.subtitle{font-size:13px}.intro .eyebrow{font-size:8px;letter-spacing:2px}.game-layout{display:flex;flex-direction:column;gap:27px}.wheel-stage{max-width:340px}.spin-button{width:250px}.round-panel{gap:15px}.question-card{padding:22px;min-height:290px}.question-content{min-height:205px}.timer-digits{font-size:72px}.timer-panel{padding:20px}.timer-footer{font-size:9px}.timer-start{min-width:107px}.scoreboard{gap:10px;flex-wrap:wrap;padding:17px 10px;margin-top:25px}.team{gap:8px}.team-icon{display:none}.team-name h2{font-size:23px}.team-name>span{font-size:6px;letter-spacing:1px}.score-divider{width:26px}.score-divider>span{display:none}.score-controls{gap:8px}.score-controls button{width:25px;height:25px}.score-controls output{font-size:32px;min-width:22px}.footer{align-items:flex-start;gap:15px;font-size:8px;line-height:1.8}.footer>span:first-child>span{font-size:11px}.footer>span:last-child{max-width:135px;text-align:right}.footer-dot{margin:0 3px}.settings-scroll{padding:0 18px}.dialog-header{padding:22px 18px}.dialog-bottom{padding:15px 18px;gap:12px}.dialog-bottom p{font-size:9px}.dialog-bottom .primary{font-size:10px;padding:10px 12px}.settings-options{grid-template-columns:1fr;gap:18px}.reset-section{gap:15px}.reset-section button{white-space:nowrap}.question-content .question-text{font-size:25px}.question-content .question-text.long{font-size:21px}.question-content .question-text.very-long{font-size:18px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 
-/* Extra space above the layout for TVs that crop the top edge. */
-:root{--tv-top-padding:48px}
-.app{padding-top:var(--tv-top-padding)}
+/* Safe space inside the screen for TVs that crop the top and bottom edges. */
+:root{--tv-top-padding:48px;--tv-bottom-padding:48px}
+.app{padding-top:var(--tv-top-padding);padding-bottom:var(--tv-bottom-padding)}
 
 /* Sender attribution keeps the original question-number typography. */
 .question-heading{display:flex;align-items:center;gap:17px;min-width:0;flex:1}
@@ -65,4 +65,114 @@
   .timer-panel{padding:15px 21px 12px}.timer-main{padding:9px 0 12px}.timer-digits{font-size:60px}
   .scoreboard{max-width:1070px;margin-top:22px;padding:13px 22px}.team-icon{width:43px;height:43px}.score-controls output{font-size:34px}
   .footer{margin:16px 0}.question-content .question-text{font-size:23px}.question-content .question-text.long{font-size:19px}.question-content .question-text.very-long{font-size:16px}
+}
+
+/* The portrait sits outside the card; the existing game columns keep their widths. */
+.sender-portrait{width:150px;margin:18px 0 0 auto;padding:9px;border:1px solid #aa946170;background:linear-gradient(140deg,#26332cd9,#122123eb);box-shadow:0 10px 30px #0003}
+.sender-portrait[hidden]{display:none}
+.sender-portrait .sender-photo{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;border-radius:2px;padding:0;border:1px solid #bca87940}
+.sender-portrait figcaption{text-align:center;font-size:8px;line-height:1.4;letter-spacing:1.4px;text-transform:uppercase;color:var(--gold);padding:10px 0 2px}
+@media(min-width:1440px), (min-width:1280px) and (max-height:880px){
+  .game-layout{--sender-portrait-width:clamp(150px,12vw,210px);--sender-portrait-gap:20px;transform:translateX(calc((var(--sender-portrait-width) + var(--sender-portrait-gap)) / -2))}
+  .sender-portrait{position:absolute;left:calc(100% + var(--sender-portrait-gap));top:-1px;width:var(--sender-portrait-width);margin:0}
+}
+
+/* Fit the play surface inside the viewport, including both TV-safe margins. */
+html,body{height:100%;overflow:hidden}
+.app{height:100vh;height:100dvh;display:grid;grid-template-rows:auto minmax(0,1fr) auto}
+.app>main{display:grid;grid-template-rows:auto minmax(0,1fr) auto;min-height:0}
+.game-layout{width:100%;height:100%;min-height:0;margin:0 auto}
+.wheel-panel{min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.wheel-panel>*{flex-shrink:0}
+.round-panel{height:100%;min-height:0}
+.round-panel .question-card{min-height:0;display:grid;grid-template-rows:auto minmax(0,1fr) auto}
+.question-card .question-content{height:100%;min-height:0;overflow:hidden}
+.question-content>*{flex-shrink:0}
+.question-content .question-text{width:100%}
+.timer-panel{flex-shrink:0}
+.scoreboard{width:100%}
+.sender-portrait{display:flex;flex-direction:column;max-height:100%}
+.sender-portrait .sender-photo{min-height:0;flex-shrink:1}
+.sender-portrait figcaption{flex-shrink:0}
+/* On narrower screens, keep the portrait beside the sender rather than adding height. */
+@media(max-width:1279px), (min-width:1280px) and (max-width:1439px) and (min-height:881px){
+  .question-card{--portrait-inline-size:46px}
+  .question-top{padding-right:calc(var(--portrait-inline-size) + 12px)}
+  .sender-portrait{position:absolute;right:18px;top:18px;width:var(--portrait-inline-size);height:var(--portrait-inline-size);margin:0;padding:2px}
+  .sender-portrait .sender-photo{height:100%;aspect-ratio:1}
+  .sender-portrait figcaption{display:none}
+}
+@media(max-height:880px){
+  .topbar{height:48px}.intro{padding:12px 0}h1{font-size:40px;margin:6px 0 8px}.subtitle{font-size:13px}
+  .timer-panel{padding:12px 18px 10px}.timer-digits{font-size:52px}.timer-main{padding:8px 0 10px}
+  .timer-footer{margin-top:10px;font-size:8px}.scoreboard{margin-top:14px;padding:10px 20px}
+  .team-icon{width:36px;height:36px;font-size:27px}.score-controls output{font-size:30px}.team-name h2{font-size:23px}
+  .footer{margin:9px 0;font-size:8px}.question-content.empty h2{font-size:20px}.question-content.empty>p{font-size:13px;line-height:1.5}
+  .question-content.empty .empty-symbol{width:30px;height:30px;margin-bottom:6px}
+}
+@media(max-width:760px){
+  .topbar{height:48px}.intro{padding:10px 0}.intro h1{font-size:34px;margin:6px 0}.subtitle{font-size:11px}
+  .game-layout{display:grid;grid-template-columns:1fr;grid-template-rows:minmax(110px,.45fr) minmax(0,1fr);gap:12px;transform:none}
+  .wheel-panel{padding-top:0}.wheel-panel>.section-label{display:none}.wheel-caption{font-size:8px;margin-top:5px}
+  .wheel-stage{margin:0 auto 5px}.spin-button{min-height:30px;padding:6px 15px;font-size:10px;width:190px}
+  .round-panel{padding-top:0;gap:8px}.round-panel .question-card{padding:12px 15px 10px}.question-card.has-sender .question-content{padding-top:8px;padding-bottom:8px}
+  .question-heading{flex-wrap:nowrap;gap:8px}.sender-attribution{flex-basis:auto}.sender-name{font-size:19px}
+  .sender-portrait{right:12px;top:12px}.question-card{--portrait-inline-size:36px}.round-badge{display:none}
+  .timer-panel{padding:9px 13px}.timer-digits{font-size:38px}.timer-main{padding:5px 0 7px}.timer-footer{margin-top:7px;font-size:7px}
+  .scoreboard{padding:8px;margin-top:10px}.team-name h2{font-size:20px}.score-controls output{font-size:26px}.footer{margin:8px 0;font-size:7px}
+}
+
+/* TV layout: scores, wheel, an expanded question/timer column, sender portrait. */
+.app{max-width:1880px;padding-left:clamp(28px,3vw,70px);padding-right:clamp(28px,3vw,70px)}
+.app>main{grid-template-rows:auto minmax(0,1fr)}
+.game-layout{position:relative;max-width:none;grid-template-columns:clamp(112px,7.2vw,146px) minmax(190px,.65fr) minmax(0,1.7fr) clamp(125px,9.5vw,182px);grid-template-rows:minmax(0,1fr);gap:clamp(12px,1.1vw,22px);transform:none}
+.game-layout>.scoreboard{grid-column:1;grid-row:1;align-self:center;display:flex;flex-direction:column;align-items:stretch;max-width:none;width:100%;margin:0;padding:22px 10px;gap:19px;border:1px solid var(--line);background:linear-gradient(170deg,#1e332dba,#172327a6,#35202b99)}
+.game-layout>.wheel-panel{grid-column:2;grid-row:1;padding-top:0}
+.game-layout>.round-panel{grid-column:3;grid-row:1;padding-top:0;gap:12px}
+.game-layout>.sender-portrait{grid-column:4;grid-row:1;position:static;align-self:start;left:auto;right:auto;top:auto;max-height:min(54%,280px);width:100%;height:auto;margin:0;padding:8px}
+.game-layout>.sender-portrait .sender-photo{width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;flex-shrink:1}
+.game-layout>.sender-portrait figcaption{display:block;font-size:7px;padding-top:8px}
+.game-layout .spin-button{width:min(254px,100%)}
+.game-layout .question-top{padding-right:0}
+.game-layout .question-card{padding:22px 26px 16px}
+.game-layout .question-card.has-sender .question-content{padding-top:12px;padding-bottom:14px}
+.round-panel .question-content .question-text{font-size:clamp(26px,2.1vw,38px);line-height:1.4}
+.game-layout .timer-panel{padding:15px 22px 12px}
+.game-layout .timer-digits{font-size:clamp(50px,6.5vh,74px)}
+.game-layout .timer-main{padding:8px 0 10px}
+.game-layout .timer-footer{margin-top:10px}
+.game-layout .scoreboard .team{flex:none;flex-direction:column;align-items:center;text-align:center;gap:10px;width:100%}
+.game-layout .scoreboard .team-icon{display:none}
+.game-layout .scoreboard .team-name h2{font-size:25px;margin-top:5px}
+.game-layout .scoreboard .team-name>span{font-size:7px;letter-spacing:1.1px}
+.game-layout .scoreboard .score-controls{margin:0;gap:6px;width:100%;justify-content:center}
+.game-layout .scoreboard .score-controls output{font-size:44px;min-width:0;flex:1}
+.game-layout .scoreboard .score-controls button{width:23px;height:23px;flex-shrink:0}
+.game-layout .scoreboard .score-divider{width:100%;padding:13px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.game-layout .scoreboard .score-divider>span{display:block;font-size:7px;letter-spacing:1.2px}
+.game-layout .scoreboard .score-divider b{display:none}
+@media(max-height:880px){
+  .game-layout>.scoreboard{padding:16px 9px;gap:13px}
+  .game-layout .scoreboard .team{gap:7px}.game-layout .scoreboard .team-name h2{font-size:22px}
+  .game-layout .scoreboard .score-controls output{font-size:38px}.game-layout .scoreboard .score-divider{padding:10px 0}
+  .game-layout .question-card{padding:17px 22px 13px}.game-layout .timer-panel{padding:11px 18px 9px}
+}
+@media(max-width:1100px){
+  .game-layout{grid-template-columns:100px minmax(160px,.6fr) minmax(0,1.7fr) 110px;gap:10px}
+  .game-layout>.scoreboard{padding:16px 8px}.game-layout .scoreboard .team-name h2{font-size:21px}
+  .game-layout .scoreboard .score-controls output{font-size:34px}.game-layout .scoreboard .score-controls button{width:21px;height:21px}
+  .game-layout .question-card{padding:16px}.game-layout .timer-panel{padding-left:16px;padding-right:16px}
+}
+@media(max-width:760px){
+  .app{padding-left:14px;padding-right:14px}
+  .game-layout{grid-template-columns:86px minmax(0,1fr);grid-template-rows:minmax(100px,.4fr) minmax(0,1fr);gap:10px}
+  .game-layout>.scoreboard{grid-column:1;grid-row:1 / span 2;padding:14px 7px}
+  .game-layout>.wheel-panel{grid-column:2;grid-row:1}.game-layout>.round-panel{grid-column:2;grid-row:2;gap:8px}
+  .game-layout>.sender-portrait{grid-column:2;grid-row:1;position:absolute;right:0;top:0;left:auto;width:40px;height:40px;max-height:none;padding:2px}
+  .game-layout>.sender-portrait .sender-photo{height:100%;aspect-ratio:1}.game-layout>.sender-portrait figcaption{display:none}
+  .game-layout .scoreboard .team-name h2{font-size:18px}.game-layout .scoreboard .score-controls output{font-size:28px}
+  .game-layout .scoreboard .score-controls{gap:3px}.game-layout .scoreboard .score-controls button{width:18px;height:18px;font-size:13px}
+  .game-layout .scoreboard .team-name>span{font-size:6px;letter-spacing:.6px}.game-layout .scoreboard .score-divider>span{font-size:6px}
+  .game-layout .question-card{padding:12px}.game-layout .timer-panel{padding:9px 12px}.game-layout .timer-digits{font-size:38px}
+  .round-panel .question-content .question-text{font-size:26px}
 }
