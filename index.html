@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101a1b">
+  <title>Что? Где? Когда? — Ночь в замке</title>
+  <link rel="icon" href="assets/crest.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script src="game-core.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="scenery" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="app">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Ночь в замке — главная"><img src="assets/crest.svg" alt="" width="35" height="40"><span>НОЧЬ В ЗАМКЕ<small>ИНТЕЛЛЕКТУАЛЬНЫЙ СЕАНС</small></span></a>
+      <div class="toolbar">
+        <span class="local-status"><i></i> Всё готово к сеансу</span>
+        <button id="sound-toggle" class="icon-button" aria-label="Включить звук" title="Включить звук"><svg viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path id="sound-waves" d="m16 9 5 6m0-6-5 6"/></svg></button>
+        <button id="fullscreen" class="icon-button" aria-label="На весь экран" title="На весь экран (F)"><svg viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg></button>
+        <button id="settings-open" class="settings-button"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16M8 3v6m8 0v6M10 15v6"/></svg>Настройки</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="intro" aria-labelledby="game-title">
+        <p class="eyebrow"><span></span> HALLOWEEN · ОСОБАЯ ИГРА <span></span></p>
+        <h1 id="game-title">Что<span>?</span> Где<span>?</span> Когда<span>?</span></h1>
+        <p class="subtitle">Когда за столом собираются тени, на свет выходит истина.</p>
+      </section>
+
+      <div class="game-layout">
+        <section class="wheel-panel" aria-label="Выбор случайного вопроса">
+          <div class="section-label"><span class="tiny-diamond">◆</span> КОЛЕСО СУДЬБЫ <span class="tiny-diamond">◆</span></div>
+          <div class="wheel-stage">
+            <div class="wheel-aura"></div>
+            <div class="wheel-pointer" aria-hidden="true"></div>
+            <svg id="wheel" viewBox="0 0 460 460" role="img" aria-label="Колесо с номерами вопросов">
+              <defs>
+                <radialGradient id="wheel-face"><stop stop-color="#36433d"/><stop offset=".8" stop-color="#20312e"/><stop offset="1" stop-color="#111f20"/></radialGradient>
+                <linearGradient id="brass" x2="1" y2="1"><stop stop-color="#d3bd82"/><stop offset=".4" stop-color="#76603d"/><stop offset=".7" stop-color="#baa36a"/><stop offset="1" stop-color="#574a31"/></linearGradient>
+              </defs>
+              <circle cx="230" cy="230" r="219" fill="#101b1b" stroke="url(#brass)" stroke-width="2"/>
+              <circle cx="230" cy="230" r="212" fill="none" stroke="#6d6040" stroke-width="1"/>
+              <g id="wheel-rotor"></g>
+              <circle cx="230" cy="230" r="198" fill="none" stroke="#8a7850" stroke-width="1"/>
+              <circle cx="230" cy="230" r="143" fill="none" stroke="#b8a16b" stroke-opacity=".23"/>
+              <g class="wheel-hub">
+                <circle cx="230" cy="230" r="55" fill="#111f20" stroke="url(#brass)" stroke-width="2"/>
+                <circle cx="230" cy="230" r="48" fill="none" stroke="#9f8858" stroke-opacity=".5"/>
+                <path d="m230 195 7 26 27 9-27 8-7 27-8-27-26-8 26-9Z" fill="#c2aa72"/>
+                <path d="m208 208 22 14 22-14-14 22 14 22-22-14-22 14 14-22Z" fill="#c2aa72" opacity=".45"/>
+                <circle cx="230" cy="230" r="7" fill="#802d32" stroke="#d0b67d"/>
+              </g>
+            </svg>
+            <span class="wheel-ordinal left" aria-hidden="true">✦</span><span class="wheel-ordinal right" aria-hidden="true">✦</span>
+          </div>
+          <button id="spin" class="primary spin-button"><svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2 6M20 4v7h-7"/></svg><span>Вращать колесо</span></button>
+          <p id="remaining" class="wheel-caption">15 вопросов ждут своего часа</p>
+        </section>
+
+        <section class="round-panel" aria-label="Текущий раунд">
+          <article class="question-card">
+            <div class="card-corner tl"></div><div class="card-corner tr"></div><div class="card-corner bl"></div><div class="card-corner br"></div>
+            <div class="question-top"><div class="question-heading"><span id="question-label" class="eyebrow">ТАЙНА ЕЩЁ НЕ РАСКРЫТА</span><div id="sender-attribution" class="sender-attribution" hidden><img id="sender-photo" class="sender-photo" src="senders_img/default.png" alt=""><div class="sender-copy"><span class="sender-prefix">Вопрос от</span><span id="sender-name" class="sender-name"></span></div></div></div><span id="round-badge" class="round-badge">РАУНД 01</span></div>
+            <div id="question-content" class="question-content empty">
+              <svg class="empty-symbol" viewBox="0 0 64 64" aria-hidden="true"><path d="M12 49V22Q12 5 32 5T52 22v27l-10-6-10 6-10-6Z"/><circle cx="25" cy="24" r="2"/><circle cx="39" cy="24" r="2"/><path d="M27 35q5-5 10 0"/></svg>
+              <h2>У каждой тайны — свой час</h2>
+              <p>Вращайте колесо, чтобы узнать,<br>какой вопрос приготовила вам эта ночь.</p>
+            </div>
+            <div class="question-bottom"><span id="pack-label">ДЕМОНСТРАЦИОННЫЕ ВОПРОСЫ</span><div class="question-links"><button id="question-picker-open" class="text-button">Выбрать вопрос <span>↗</span></button><button id="edit-questions" class="text-button">Изменить <span>↗</span></button></div></div>
+          </article>
+
+          <section id="timer-panel" class="timer-panel" aria-label="Таймер обсуждения">
+            <div class="timer-top"><span class="section-label">ВРЕМЯ НА РАЗМЫШЛЕНИЕ</span><button id="duration-open" class="text-button" title="Изменить длительность">Изменить время <span>↗</span></button></div>
+            <div class="timer-main"><div id="timer" class="timer-digits" role="timer" aria-label="Осталось времени">01<span>:</span>00</div><div class="timer-actions"><button id="timer-start" class="timer-start"><svg viewBox="0 0 24 24"><path d="m9 5 10 7-10 7Z"/></svg><span>Начать</span></button><button id="timer-reset" class="icon-button" aria-label="Сбросить таймер" title="Сбросить таймер (R)"><svg viewBox="0 0 24 24"><path d="M4 11a8 8 0 1 1 2 7M4 4v7h7"/></svg></button></div></div>
+            <div class="timer-track"><div id="timer-progress"></div></div>
+            <div class="timer-footer"><span id="timer-status">Минута, чтобы найти истину</span><span><kbd>ПРОБЕЛ</kbd> старт / пауза</span></div>
+          </section>
+        </section>
+      </div>
+
+      <section class="scoreboard" aria-label="Счёт игры">
+        <div class="team team-experts"><div class="team-icon" aria-hidden="true">♜</div><div class="team-name"><span>СИЛА РАЗУМА</span><h2>Знатоки</h2></div><div class="score-controls"><button data-score="experts" data-delta="-1" aria-label="Убавить очко знатокам">−</button><output id="score-experts" aria-label="Очки знатоков">0</output><button data-score="experts" data-delta="1" aria-label="Добавить очко знатокам">+</button></div></div>
+        <div class="score-divider"><span>СЧЁТ ИГРЫ</span><b>:</b></div>
+        <div class="team team-viewers"><div class="team-icon" aria-hidden="true">☾</div><div class="team-name"><span>СИЛА ТЬМЫ</span><h2>Зрители</h2></div><div class="score-controls"><button data-score="viewers" data-delta="-1" aria-label="Убавить очко зрителям">−</button><output id="score-viewers" aria-label="Очки зрителей">0</output><button data-score="viewers" data-delta="1" aria-label="Добавить очко зрителям">+</button></div></div>
+      </section>
+    </main>
+    <footer class="footer"><span>✦ <span>Замок хранит свои секреты. Пока.</span></span><span><kbd>W</kbd> колесо <span class="footer-dot">·</span> <kbd>F</kbd> полный экран <span class="footer-dot">·</span> <span id="played-count">Сыграно 0 из 15</span></span></footer>
+  </div>
+
+  <dialog id="settings-dialog" class="settings-dialog">
+    <div class="dialog-header"><div><p class="eyebrow">ПОДГОТОВКА К СЕАНСУ</p><h2>Тайны вашего замка</h2></div><button id="settings-close" class="icon-button" aria-label="Закрыть настройки">✕</button></div>
+    <div class="settings-scroll">
+      <section class="settings-section"><div class="settings-heading"><h3>Вопросы <span id="editor-count"></span></h3><div class="editor-tools"><button id="import-button" class="subtle-button">Импорт</button><button id="export-button" class="subtle-button">Экспорт</button><input id="import-file" type="file" accept=".json,.txt,application/json,text/plain" hidden></div></div><p class="settings-help">Впишите свои вопросы в любом количестве. Колесо выбирает каждый вопрос только один раз. Пустые поля не попадут в игру.</p><p class="settings-help">Фото: положите файл в папку <code>senders_img</code> с номером вопроса — например, <code>1.jpeg</code> или <code>1.png</code>. Можно указать другой путь в поле «Фото». Без имени используется «Тайного гостя», без фото — портрет таинственного отправителя.</p><p id="demo-notice" class="demo-notice">Сейчас загружен демонстрационный набор. Замените его своими вопросами перед вечеринкой. У вопроса № 1 есть тестовый отправитель — графиня Анна.</p><div id="question-editor"></div><div class="editor-bottom"><button id="add-question" class="subtle-button">+ Добавить вопрос</button><button id="clear-questions" class="text-button danger-text">Очистить список</button></div><p class="settings-help import-help">JSON сохраняет вопросы, имена и пути к фото. TXT поддерживает только текст вопросов. Файлы изображений хранятся отдельно в папке проекта.</p></section>
+      <section class="settings-section settings-options"><div><h3>Длительность раунда</h3><label class="duration-input"><input id="duration" type="number" min="1" max="5999" step="1" value="60"> <span>секунд</span></label><p class="settings-help">От 1 секунды до 99 минут 59 секунд.</p></div><div><h3>Звуки замка</h3><label class="checkbox-label"><input id="sound-enabled" type="checkbox"> Включить звуковые эффекты</label><label class="volume-label" for="volume">Громкость <input id="volume" type="range" min="0" max="100" value="45"></label><button id="sound-test" class="text-button">♫ Проверить звук</button></div></section>
+      <section class="settings-section reset-section"><div><h3>Начать новую игру</h3><p class="settings-help">Сбросить счёт и вернуть все вопросы на колесо.</p></div><button id="new-game" class="subtle-button danger-text">Сбросить игру</button></section>
+    </div>
+    <div class="dialog-bottom"><p id="settings-message" role="status">Изменения вопросов начнут новую игру.</p><button id="save-settings" class="primary">Сохранить и вернуться</button></div>
+  </dialog>
+  <dialog id="question-picker" class="picker-dialog">
+    <div class="dialog-header"><div><p class="eyebrow">АРХИВ ТАЙН</p><h2>Выбрать вопрос</h2></div><button id="question-picker-close" class="icon-button" aria-label="Закрыть выбор вопроса">✕</button></div>
+    <div class="picker-body"><label class="sr-only" for="question-search">Поиск по номеру, отправителю или тексту</label><input id="question-search" class="question-search" type="search" placeholder="Номер, отправитель или текст вопроса…"><p class="settings-help">Можно открыть любой вопрос. Повторный просмотр не добавит сыгранных вопросов и не изменит счёт. При выборе таймер сбросится; новый вопрос будет отмечен сыгранным.</p><div id="question-list" class="question-list"></div></div>
+  </dialog>
+  <dialog id="duration-dialog" class="small-dialog"><form id="duration-form"><p class="eyebrow">ПОВЕЛЕВАЙТЕ ВРЕМЕНЕМ</p><h2>Время на обсуждение</h2><label for="quick-duration">Длительность в секундах</label><input id="quick-duration" type="number" min="1" max="5999" step="1" required><div class="duration-presets"><button type="button" data-duration="30">30 сек</button><button type="button" data-duration="60">1 мин</button><button type="button" data-duration="90">1,5 мин</button><button type="button" data-duration="120">2 мин</button></div><p class="settings-help">Новая длительность сбросит текущий таймер.</p><div class="small-dialog-actions"><button id="duration-cancel" type="button" class="subtle-button">Отмена</button><button type="submit" class="primary">Применить</button></div></form></dialog>
+  <div id="toast" class="toast" role="status"></div>
+  <div id="announcer" class="sr-only" aria-live="polite"></div>
+</body>
+</html>
